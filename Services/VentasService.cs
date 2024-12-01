@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using WhatABook.DAL;
+using WhatABook.Data;
 using WhatABook.Models;
 
 namespace WhatABook.Services
 {
-	public class VentasService(IDbContextFactory<Contexto> DbFactory)
+	public class VentasService(IDbContextFactory<ApplicationDbContext> DbFactory)
 	{
 		public async Task<bool> Guardar(Ventas venta, List<VentasDetalles> detallesVenta)
 		{

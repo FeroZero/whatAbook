@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using WhatABook.DAL;
+using WhatABook.Data;
 using WhatABook.Models;
 
 namespace WhatABook.Services
 {
-	public class PagosService(IDbContextFactory<Contexto> DbFactory)
+	public class PagosService(IDbContextFactory<ApplicationDbContext> DbFactory)
 	{
 		public async Task<bool> Guardar(Pagos pagos, List<VentasDetalles> detallesVenta)
 		{

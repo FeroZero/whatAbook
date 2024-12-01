@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using WhatABook.DAL;
+using WhatABook.Data;
 using WhatABook.Models;
 
 namespace WhatABook.Services
 {
-	public class CarritoDeComprasService(IDbContextFactory<Contexto> DbFactory)
+	public class CarritoDeComprasService(IDbContextFactory<ApplicationDbContext> DbFactory)
 	{
 		public async Task<bool> GuardarCarritoDeCompra(Carritos carrito)
 		{

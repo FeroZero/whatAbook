@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Drawing;
 using System.Linq.Expressions;
-using WhatABook.DAL;
+using WhatABook.Data;
 using WhatABook.Models;
 
 namespace WhatABook.Services;
 
-public class GenerosService(IDbContextFactory<Contexto> DbFactory)
+public class GenerosService(IDbContextFactory<ApplicationDbContext> DbFactory)
 {
 	public async Task<bool> Guardar(Generos genero)
 	{

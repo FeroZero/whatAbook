@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using WhatABook.DAL;
+using WhatABook.Data;
 using WhatABook.Models;
 
 namespace WhatABook.Services;
 
-public class LibrosService(IDbContextFactory<Contexto> DbFactory)
+public class LibrosService(IDbContextFactory<ApplicationDbContext> DbFactory)
 {
     
 

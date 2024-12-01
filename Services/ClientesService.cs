@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using WhatABook.DAL;
+using WhatABook.Data;
 using WhatABook.Models;
 
 namespace WhatABook.Services;
 
-public class ClientesService(IDbContextFactory<Contexto> DbFactory)
+public class ClientesService(IDbContextFactory<ApplicationDbContext> DbFactory)
 {
     public async Task<bool> Guardar(Clientes cliente)
     {
