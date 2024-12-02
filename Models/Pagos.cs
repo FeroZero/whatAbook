@@ -13,8 +13,6 @@ namespace WhatABook.Models
 		public int ClienteId { get; set; }
 		public Clientes Clientes { get; set; }
 
-		[Required]
-		[ForeignKey("MetodoPago")]
 		public string MetodoPagoId { get; set; }
 
 		[Required]
