@@ -9,14 +9,14 @@ public class Ventas
 	public int VentaId { get; set; }
 
 	[Required]
-	[ForeignKey("Clientes")]
+	[ForeignKey("ClienteId")]
 	public int ClienteId { get; set; }
-	public Clientes Clientes { get; set; }
+	public Clientes? Clientes { get; set; }
 
 	[Required]
-	[ForeignKey("Pagos")]
+	[ForeignKey("PagoId")]
 	public int PagoId { get; set; }
-	public Pagos Pagos { get; set; }
+	public Pagos? Pagos { get; set; }
 
 	[Required(ErrorMessage = "Fecha Requerida")]
 	public DateTime FechaVenta { get; set; } = DateTime.Now;
