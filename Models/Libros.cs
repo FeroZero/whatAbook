@@ -17,9 +17,7 @@ public class Libros
 
     [Required(ErrorMessage = " Campo obligatorio")]
 
-    [ForeignKey("Generos")]
     public string GeneroId { get; set; }
-    public Generos Genero { get; set; }
 
     [Required(ErrorMessage = " Campo obligatorio")]
     [RegularExpression(@"^\d+(\.\d+)?$", ErrorMessage = "No se permiten letras.")]
@@ -30,7 +28,7 @@ public class Libros
 
     [Required(ErrorMessage = " Campo obligatorio")]
     public string? Estado { get; set; }
-
+      
     [Required(ErrorMessage = " Campo obligatorio")]
     
     public string? Descripcion { get; set; }
