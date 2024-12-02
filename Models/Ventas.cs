@@ -13,6 +13,7 @@ public class Ventas
 	public int ClienteId { get; set; }
 	public Clientes Clientes { get; set; }
 
+	[Required]
 	[ForeignKey("Pagos")]
 	public int PagoId { get; set; }
 	public Pagos Pagos { get; set; }
