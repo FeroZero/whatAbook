@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using WhatABook.Components;
 using WhatABook.Components.Account;
 using WhatABook.Data;
+using WhatABook.Services;
 
 namespace WhatABook
 {
@@ -13,8 +14,17 @@ namespace WhatABook
 		{
 			var builder = WebApplication.CreateBuilder(args);
 
-			// Add services to the container.
-			builder.Services.AddRazorComponents()
+            // Add services to the container.
+
+			//Servicios
+            builder.Services.AddScoped<GenerosService>();
+            builder.Services.AddScoped<ClientesService>();
+            builder.Services.AddScoped<CarritoDeComprasService>();
+            builder.Services.AddScoped<LibrosService>();
+            builder.Services.AddScoped<PagosService>();
+            builder.Services.AddScoped<VentasService>();
+
+            builder.Services.AddRazorComponents()
 				.AddInteractiveServerComponents();
 
 			builder.Services.AddCascadingAuthenticationState();
@@ -30,7 +40,7 @@ namespace WhatABook
 				.AddIdentityCookies();
 
 			var connectionString = builder.Configuration.GetConnectionString("SqlConStr") ?? throw new InvalidOperationException("Connection string 'SqlConStr' not found.");
-			builder.Services.AddDbContext<ApplicationDbContext>(options =>
+			builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
 				options.UseSqlServer(connectionString));
 			builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -41,7 +51,7 @@ namespace WhatABook
 
 			builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
 
-			var app = builder.Build();
+            var app = builder.Build();
 
 			// Configure the HTTP request pipeline.
 			if (app.Environment.IsDevelopment())
