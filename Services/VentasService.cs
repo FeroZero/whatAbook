@@ -76,7 +76,7 @@ namespace WhatABook.Services
 			// Actualizar datos de la venta
 			ventaExistente.ClienteId = venta.ClienteId;
 			ventaExistente.FechaVenta = venta.FechaVenta;
-			ventaExistente.PagoId = venta.PagoId;
+			//ventaExistente.PagoId = venta.PagoId;
 
 			var result = await contexto.SaveChangesAsync();
 			return result > 0;
