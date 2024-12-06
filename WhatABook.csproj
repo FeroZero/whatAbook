@@ -19,4 +19,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Components\Account\Pages\Libros\" />
+  </ItemGroup>
+
 </Project>
