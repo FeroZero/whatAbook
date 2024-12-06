@@ -23,6 +23,7 @@ namespace WhatABook
             builder.Services.AddScoped<LibrosService>();
             builder.Services.AddScoped<PagosService>();
             builder.Services.AddScoped<VentasService>();
+            builder.Services.AddBlazorBootstrap();
 
             builder.Services.AddRazorComponents()
 				.AddInteractiveServerComponents();
