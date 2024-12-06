@@ -1,0 +1,15 @@
+﻿@page "/Cliente/Index"
+@inject ClientesService clientesService
+@inject ToastService toastService
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+
+@code {
+	public List<Clientes> ListaClientes { get; set; } = new List<Clientes>();
+
+	protected override async Task OnInitializedAsync()
+	{
+		ListaClientes = await clientesService.Listar(c => c.ClienteId > 0);
+	}
+}
