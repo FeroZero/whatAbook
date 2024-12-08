@@ -14,7 +14,7 @@ public class VentasDetalles
 
 	[ForeignKey("Libros")]
 	public int LibroId { get; set; }
-    public Libros Libros { get; set; }
+    public Libros? Libros { get; set; }
 
     [Required]
 	[Range(0,int.MaxValue, ErrorMessage = "La cantidad no puede ser menor a 0.")]
@@ -22,5 +22,5 @@ public class VentasDetalles
 
 	[Required(ErrorMessage = "Precio Requerido.")]
 	[Range(0.01, double.MaxValue, ErrorMessage = "El valor no puedo ser menor o igual a 0.")]
-	public decimal Precio { get; set; }
+	public double Precio { get; set; }
 }
