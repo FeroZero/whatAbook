@@ -1,59 +1,153 @@
-﻿@page "/admin"
-@inject NavigationManager Navigation
+﻿@page "/Admin/Index"
+@inject NavigationManager navigationManager
+@inject LibrosService librosService
+@rendermode InteractiveServer
 
-
-
-<PageTitle>Panel Administrativo</PageTitle>
-
-<div class="container-fluid min-vh-100 d-flex flex-column justify-content-center align-items-center bg-light">
-    <!-- Header -->
-    <div class="text-center mb-4">
-        <h1 class="display-4" style="color: #343a40;"> Panel Administrativo</h1>
-        <p class="lead text-muted"></p>
-    </div>
-
-    <!-- Action Buttons -->
-    <div class="row justify-content-center w-75">
-        <!-- Create Book -->
-        <div class="col-md-4 mb-3">
-            <button class="btn btn-block btn-lg btn-outline-success p-4 rounded shadow" @onclick="NavigateToCreate">
-                <i class="bi bi-plus-circle display-4"></i>
-                <h4 class="mt-2">Agregar Libro</h4>
-            </button>
+<PageTitle>Index</PageTitle>
+<div class="container">
+    <div class="card-shadow-lg">
+        @*Header*@
+        <div class="card-header text-center">
+            <h3><strong>Listado de Libros</strong></h3>
         </div>
-        <!-- Edit Book -->
-        <div class="col-md-4 mb-3">
-            <button class="btn btn-block btn-lg btn-outline-warning p-4 rounded shadow" @onclick="NavigateToEdit">
-                <i class="bi bi-pencil-square display-4"></i>
-                <h4 class="mt-2">Editar Libro</h4>
+        @*Body*@
+        <div class="card-body">
+            @*Labels*@
+            <div class="row">
+                @*Filtrar por*@
+                <div class="col-3">
+                    <label class="form-label"><strong>Filtrar Por</strong></label>
+                </div>
+                @*ValorFiltro*@
+                <div class="col-4">
+                    <label class="form-label"><strong>B&uacute;squeda</strong></label>
+                </div>
+            </div>
+            @*Inputs y Botones*@
+            <div class="row">
+                @*Filtro*@
+                <div class="col-3">
+                    <InputSelect class="form-select" @bind-Value="Filtro">
+                        <option value="" selected disabled>Elija una opci&oacute;n</option>
+                        <option value="LibroId">LibroId</option>
+                        <option value="Titulo">Titulo</option>
 
-            </button>
+                    </InputSelect>
+                </div>
+                @*Busqueda*@
+                <div class="col-4">
+                    <div class="input-group">
+                        <input class="form-control" @bind="ValorFiltro" placeholder="Buscar"/>
+                        <button type="button" class="btn btn-outline-primary bi bi-search" @onclick="Buscar"></button>
+                    </div>
+                </div>
+                @*Restablecer*@
+                <div class="col-auto">
+                    <button type="button" class="btn btn-outline-secondary bi bi-arrow-clockwise" @onclick="Restablecer"></button>
+                </div>
+                @*Crear*@
+                <div class="col text-end">
+                    <button type="button" class="btn btn-primary bi bi-plus-circle" @onclick="Crear"></button>
+                </div>
+            </div>
+            <table class="table table-bordered text-center mt-4">
+                <thead>
+                    <tr>
+                        <th>LibroId</th>
+                        <th>Titulo</th>
+                        <th>Autores</th>
+                        <th>Descripcion</th>
+                        <th>Precio</th>
+                        <th>FechaPublicacion</th>
+                        <th>Cantidad</th>
+                        <th>ImagenUrl</th>
+                        <th>Observar</th>
+                        <th>Editar</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach(var libro in ListaLibros) {
+                        <tr>
+                            <td>@libro.LibroId</td>
+                            <td>@libro.Titulo</td>
+                            <td>@libro.Autores</td>
+                            <td>@libro.Descripcion</td>
+                            <td>@libro.Precio</td>
+                            <td>@libro.FechaPublicacion</td>
+                            <td>@libro.Cantidad</td>
+                            <td>@libro.ImagenUrl</td>
+                            @*Pantalla Observar*@
+                            <td>
+                                <button type="button" class="btn btn-outline-primary bi bi-eye"
+                                @onclick="()=> Observar(libro.LibroId)"></button>
+                            </td>
+                            @*Pantalla Editar*@
+                            <td>
+                                <button type="button" class="btn btn-outline-warning bi bi-pencil"
+                                @onclick="()=> Editar(libro.LibroId)"></button>
+                            </td>
+                            @*Pantalla Eliminar*@
+                            <td>
+                                <button type="button" class="btn btn-outline-danger bi bi-trash3"
+                                @onclick="()=> Eliminar(libro.LibroId)"></button>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
         </div>
-        <!-- Delete Book -->
-        <div class="col-md-4 mb-3">
-            <button class="btn btn-block btn-lg btn-outline-danger p-4 rounded shadow" @onclick="NavigateToDelete">
-                <i class="bi bi-trash display-4"></i>
-                <h4 class="mt-2">Eliminar Libro</h4>
-            </button>
-        </div>
+
     </div>
 </div>
 
 
+
 @code {
 
-    private void NavigateToCreate()
-    {
-        
+    public List<Libros> ListaLibros { get; set; } = new List<Libros>();
+    public string Filtro { get; set; } = string.Empty;
+    public string ValorFiltro { get; set; } = string.Empty;
+
+    protected override async Task OnInitializedAsync() {
+        ListaLibros = await librosService.Listar(l => l.LibroId > 0);
     }
 
-    private void NavigateToEdit()
-    {
+    private async Task Buscar() {
+        if (ValorFiltro.Trim() != "")
+        {
+            if (Filtro == "Id" && int.TryParse(ValorFiltro, out int tecnicoId))
+                ListaLibros = await librosService.Listar(l => l.LibroId == tecnicoId);
+            else if (Filtro == "Titulo")
+                ListaLibros = await librosService.Listar(l => l.Titulo.ToLower().Contains(ValorFiltro.ToLower()));
+
+        }
+        else
+            ListaLibros = await librosService.Listar(l => l.LibroId > 0);
     }
 
-    private void NavigateToDelete()
-    {
-        
+    private async Task Restablecer() {
+        ListaLibros = await librosService.Listar(l => l.LibroId > 0);
+        Filtro = string.Empty;
+        ValorFiltro = string.Empty;
     }
 
+    public void Crear() {
+        navigationManager.NavigateTo("/Admin/Create");
+    }
+
+    public void Observar(int id) {
+        navigationManager.NavigateTo($"Admin/Details/{id}");
+    }
+
+    public void Editar(int id) {
+        navigationManager.NavigateTo($"/Admin/Edit/{id}");
+    }
+
+    public void Eliminar(int id)
+    {
+        navigationManager.NavigateTo($"/Admin/Delete/{id}");
+
+    }
 }
