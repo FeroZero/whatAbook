@@ -12,7 +12,7 @@ using WhatABook.Data;
 namespace WhatABook.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241209084305_Inicial")]
+    [Migration("20241209204740_Inicial")]
     partial class Inicial
     {
         /// <inheritdoc />
@@ -24,6 +24,21 @@ namespace WhatABook.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("GenerosLibros", b =>
+                {
+                    b.Property<int>("GenerosGeneroId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LibrosLibroId")
+                        .HasColumnType("int");
+
+                    b.HasKey("GenerosGeneroId", "LibrosLibroId");
+
+                    b.HasIndex("LibrosLibroId");
+
+                    b.ToTable("GenerosLibros");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -231,16 +246,11 @@ namespace WhatABook.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GeneroId"));
 
-                    b.Property<int?>("LibrosLibroId")
-                        .HasColumnType("int");
-
                     b.Property<string>("TipoGeneros")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("GeneroId");
-
-                    b.HasIndex("LibrosLibroId");
 
                     b.ToTable("Generos");
                 });
@@ -469,6 +479,21 @@ namespace WhatABook.Migrations
                     b.ToTable("VentasDetalles");
                 });
 
+            modelBuilder.Entity("GenerosLibros", b =>
+                {
+                    b.HasOne("WhatABook.Models.Generos", null)
+                        .WithMany()
+                        .HasForeignKey("GenerosGeneroId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WhatABook.Models.Libros", null)
+                        .WithMany()
+                        .HasForeignKey("LibrosLibroId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -518,13 +543,6 @@ namespace WhatABook.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("WhatABook.Models.Generos", b =>
-                {
-                    b.HasOne("WhatABook.Models.Libros", null)
-                        .WithMany("Generos")
-                        .HasForeignKey("LibrosLibroId");
                 });
 
             modelBuilder.Entity("WhatABook.Models.MetodosDePagos", b =>
@@ -589,11 +607,6 @@ namespace WhatABook.Migrations
                     b.Navigation("Libros");
 
                     b.Navigation("Ventas");
-                });
-
-            modelBuilder.Entity("WhatABook.Models.Libros", b =>
-                {
-                    b.Navigation("Generos");
                 });
 
             modelBuilder.Entity("WhatABook.Models.Orden", b =>

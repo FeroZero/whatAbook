@@ -53,6 +53,19 @@ namespace WhatABook.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Generos",
+                columns: table => new
+                {
+                    GeneroId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TipoGeneros = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Generos", x => x.GeneroId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Libros",
                 columns: table => new
                 {
@@ -212,22 +225,27 @@ namespace WhatABook.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Generos",
+                name: "GenerosLibros",
                 columns: table => new
                 {
-                    GeneroId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    TipoGeneros = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LibrosLibroId = table.Column<int>(type: "int", nullable: true)
+                    GenerosGeneroId = table.Column<int>(type: "int", nullable: false),
+                    LibrosLibroId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Generos", x => x.GeneroId);
+                    table.PrimaryKey("PK_GenerosLibros", x => new { x.GenerosGeneroId, x.LibrosLibroId });
                     table.ForeignKey(
-                        name: "FK_Generos_Libros_LibrosLibroId",
+                        name: "FK_GenerosLibros_Generos_GenerosGeneroId",
+                        column: x => x.GenerosGeneroId,
+                        principalTable: "Generos",
+                        principalColumn: "GeneroId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_GenerosLibros_Libros_LibrosLibroId",
                         column: x => x.LibrosLibroId,
                         principalTable: "Libros",
-                        principalColumn: "LibroId");
+                        principalColumn: "LibroId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -383,8 +401,8 @@ namespace WhatABook.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Generos_LibrosLibroId",
-                table: "Generos",
+                name: "IX_GenerosLibros_LibrosLibroId",
+                table: "GenerosLibros",
                 column: "LibrosLibroId");
 
             migrationBuilder.CreateIndex(
@@ -442,7 +460,7 @@ namespace WhatABook.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Generos");
+                name: "GenerosLibros");
 
             migrationBuilder.DropTable(
                 name: "MetodosDePagos");
@@ -458,6 +476,9 @@ namespace WhatABook.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Generos");
 
             migrationBuilder.DropTable(
                 name: "Orden");
