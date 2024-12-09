@@ -1,23 +1,78 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
+<Toasts class="p-3" AutoHide="true" StackLength="2" Delay="4000" Placement="ToastsPlacement.TopRight" />
+
+<div class="navbar navbar-expand-lg fixed-top custom-navbar" id="NavigationBar">
+    <div class="container-fluid">
+        <!-- Logo con ícono y texto -->
+        <a class="navbar-brand d-flex align-items-center" href="" style="font-family: 'Permanent Marker', sans-serif; color: #FFFFFF; font-weight: bold;">
+            <span>WhatABook</span>
+            <i class="bi bi-book ms-2"></i>
+        </a>
+        <!-- Botón de colapso para dispositivos móviles -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <!-- Enlaces de navegación -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="" Match="NavLinkMatch.All" style="font-family: 'Permanent Marker', sans-serif; color: #FFFFFF;">
+                        Inicio
+                    </NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="https://wa.me/18096680075" Match="NavLinkMatch.All" style="font-family: 'Permanent Marker', sans-serif; color: #FFFFFF;">
+                        Contactos
+                    </NavLink>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<main class="flex-grow-1 p-4 mt-5 pt-7 bg-white">
+    <!-- Cambié pt-3 a pt-5 para aumentar el padding superior -->
+    <div class="top-row d-flex justify-content-between align-items-center mb-4 bg-white p-2 top-rower" style="margin-top: 20px;">
+        <h5 style="font-family: 'Permanent Marker', sans-serif; font-weight: bold; color: #FFEB3B;" class="fw-bolder">
+            <strong style="display: flex; align-items: center; width: auto; height: auto; margin-right: 15px;">
+                WhatABook <i class="bi bi-book ms-2"></i>
+            </strong>
+        </h5>
+        <div class="d-flex justify-content-end align-items-center ms-auto">
+        </div>
     </div>
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-        </div>
-
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
 
 <div id="blazor-error-ui">
     An unhandled error has occurred.
     <a href="" class="reload">Reload</a>
     <a class="dismiss">🗙</a>
 </div>
+
+
+    <article class="content bg-white">
+        @Body
+    </article>
+</main>
+
+
+<style>
+    .custom-navbar {
+        background-color: #FFEB3B; /* Color de fondo personalizado */
+        transition: background-color 0.3s ease-in-out;
+    }
+
+    .nav-link {
+        transition: color 0.3s ease;
+    }
+
+        .nav-link:hover {
+            color: #fff;
+        }
+
+    .mt-5 {
+        margin-top: 5rem;
+    }
+</style>

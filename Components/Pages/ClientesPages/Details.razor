@@ -1,0 +1,18 @@
+﻿@page "/Cliente/Details"
+@inject ClientesService clientesService
+@inject ToastService toastService
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+
+@code {
+	[Parameter]
+	public int clienteId { get; set; }
+	public Clientes cliente { get; set; } = new Clientes();
+
+	protected override async Task OnInitializedAsync()
+	{
+		cliente = await clientesService.Buscar(clienteId);
+	}
+
+}

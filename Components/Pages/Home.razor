@@ -1,7 +1,207 @@
-﻿@page "/"
+﻿ @page "/"
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatABook - Home</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css">
+    <style>
+        /* Estilos básicos */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', Arial, sans-serif;
+        }
 
-<PageTitle>Home</PageTitle>
+        body {
+            background-color: #f4f4f4;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
 
-<h1>Hello, world!</h1>
+        header .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
 
-Welcome to your new app.
+        header nav a {
+            color: #0056b3;
+            margin: 0 1rem;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+            header nav a:hover {
+                color: #FFD700;
+            }
+
+        /* Hero section */
+        .hero {
+            background: url('https://images.unsplash.com/photo-1512820790803-83ca734da794?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920') no-repeat center center;
+            background-size: cover;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            color: white;
+            padding: 2rem;
+            position: relative;
+        }
+
+            .hero::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 0;
+            }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .hero .btn {
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            color: white;
+            font-weight: bold;
+            margin: 0 0.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-login {
+            background-color: #81D4FA;
+        }
+
+            .btn-login:hover {
+                transform: scale(1.05);
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            }
+
+        .btn-signup {
+            background-color: #00b09b;
+        }
+
+            .btn-signup:hover {
+                transform: scale(1.05);
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            }
+
+        /* Features section */
+        .features {
+            background-color: #fff;
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+            .features h2 {
+                color: #0056b3;
+                font-size: 2rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .features .feature {
+                display: inline-block;
+                width: 300px;
+                padding: 1rem;
+                margin: 1rem;
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                transition: transform 0.3s ease;
+                background-color: #FFD700;
+                color: #333;
+            }
+
+                .features .feature:hover {
+                    transform: translateY(-10px);
+                }
+
+        /* Pie de página */
+        footer {
+            width: 100%;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1rem;
+            margin-top: auto;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+            footer a {
+                color: #FFD700;
+                text-decoration: none;
+                margin: 0 0.5rem;
+            }
+
+                footer a:hover {
+                    text-decoration: underline;
+                }
+    </style>
+</head>
+<body>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Welcome to WhatABook!</h1>
+            <p>Discover a world of books, tailored to your preferences.</p>
+            <div>
+                <button class="btn btn-login" onclick="window.location.href='/Account/Login'">Log In</button>
+                <button class="btn btn-signup" onclick="window.location.href='/Account/Register'">Sign Up</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features" id="features">
+        <h2>Why Choose WhatABook?</h2>
+        <div class="feature">
+            <i class="bi bi-star" style="font-size: 2rem;"></i>
+            <h3>Top Picks</h3>
+            <p>Curated collections just for you.</p>
+        </div>
+        <div class="feature">
+            <i class="bi bi-book" style="font-size: 2rem;"></i>
+            <h3>Wide Selection</h3>
+            <p>Explore books from all genres and authors.</p>
+        </div>
+        <div class="feature">
+            <i class="bi bi-heart" style="font-size: 2rem;"></i>
+            <h3>Personalized Experience</h3>
+            <p>Find books you'll love with our smart recommendations.</p>
+        </div>
+    </section>
+
+    <!-- Pie de página -->
+    <footer>
+        <p>&copy; 2024 WhatABook. All rights reserved. <a href="#terms">Terms</a> | <a href="#privacy">Privacy</a></p>
+    </footer>
+</body>
+</html>
+
