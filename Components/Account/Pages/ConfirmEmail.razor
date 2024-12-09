@@ -7,11 +7,13 @@
 
 @inject UserManager<ApplicationUser> UserManager
 @inject IdentityRedirectManager RedirectManager
+@inject NavigationManager navigationManager
 
 <PageTitle>Confirm email</PageTitle>
 
-<h1>Confirm email</h1>
+<h1>Confirmar email</h1>
 <StatusMessage Message="@statusMessage" />
+<h3></h3>
 
 @code {
     private string? statusMessage;
@@ -43,6 +45,7 @@
             var code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(Code));
             var result = await UserManager.ConfirmEmailAsync(user, code);
             statusMessage = result.Succeeded ? "Thank you for confirming your email." : "Error confirming your email.";
+            navigationManager.NavigateTo("/WhatABookIndex");
         }
     }
 }

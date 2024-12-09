@@ -75,17 +75,8 @@
             Logger.LogInformation("User logged in.");
 
             var user = await SignInManager.UserManager.FindByEmailAsync(Input.Email);
-          
-            if (Input.Email == "Admin@gmail.com")
-            {
-                NavigationManager.NavigateTo("/Index/Admin");
-            }
-
-            else
-            {
                 
                 NavigationManager.NavigateTo("/WhatABookIndex");
-            }
         }
         
     }
