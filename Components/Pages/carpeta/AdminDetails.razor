@@ -1,0 +1,52 @@
+﻿@page "/Admin/Details"
+@inject LibrosService librosService
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+
+<PageTitle>Details</PageTitle>
+<div class="container">
+	<div class="shadow-lg">
+		@*Header*@
+		<div class="card-header text-center">
+			<h3><strong>Datos del Libroso</strong></h3>
+		</div>
+		@*Body*@
+		<div class="card-body">
+			<ul class="mt-5">
+				<li><strong>LibroId: </strong>@Libro.LibroId</li>
+				<li><strong>Titulo:  </strong>@Libro.Titulo</li>
+				<li><strong>Autores: </strong>@Libro.Autores</li>
+				<li><strong>Descripcion:  </strong>@Libro.Descripcion</li>
+				<li><strong>Precio:  </strong>@Libro.Precio</li>
+				<li><strong>FechaPublicacion:  </strong>@Libro.FechaPublicacion</li>
+				<li><strong>Cantidad:  </strong>@Libro.Cantidad</li>
+				<li><strong>ImagenUrl:  </strong>@Libro.ImagenUrl</li>
+			</ul>
+		</div>
+		@*Footer*@
+		<div class="card-footer text-center">
+			<button type="button" class="btn btn-primary" @onclick="Volver">Volver</button>
+		</div>
+	</div>
+</div>
+
+
+
+@code {
+	[Parameter]
+	public int LibroId { get; set; }
+
+	public Libros Libro { get; set; } = new Libros();
+
+	protected override async Task OnInitializedAsync()
+	{
+		Libro = await librosService.Buscar(LibroId);
+	}
+
+	public void Volver()
+	{
+		navigationManager.NavigateTo("/Admin/Index");
+	}
+
+}
