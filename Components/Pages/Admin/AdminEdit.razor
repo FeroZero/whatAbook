@@ -1,0 +1,144 @@
+﻿@page "/Admin/Edit{LibroId:int}"
+@inject LibrosService librosService
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+
+
+<PageTitle>Modificar Libro</PageTitle>
+
+<EditForm Model="Libro" OnValidSubmit="Modificar">
+	<DataAnnotationsValidator />
+	@*Formulario*@
+	<div class="container">
+		<div class="shadow-lg">
+			@*Header*@
+			<div class="card-header text-center">
+				<h3><strong>Editar Libros</strong></h3>
+
+			</div>
+			@*Body*@
+			<div class="card-body">
+				<div class="row">
+					@*id*@
+					<div class="col-1">
+						<label class="form-label"><strong>LibroId</strong></label>
+						<InputNumber class="form-control" @bind-Value="Libro.LibroId" readonly></InputNumber>
+					</div>
+
+					@*Titulo*@
+					<div class="col-3 ms-5">
+						<label class="form-label"><strong>Titulo</strong></label>
+						<InputText class="form-control" @bind-Value="Libro.Titulo"></InputText>
+						<ValidationMessage For="(()=> Libro.Titulo)" />
+
+
+					</div>
+
+					@* Autores*@
+					<div class="col-3 ms-5">
+						<label class="form-label"><strong> Autores</strong></label>
+						<InputText class="form-control" @bind-Value="Libro.Autores"></InputText>
+						<ValidationMessage For="(()=> Libro.Autores)" />
+
+
+					</div>
+
+					@* Descripcion*@
+					<div class="col-3 ms-5">
+						<label class="form-label"><strong> Descripcion</strong></label>
+						<InputText class="form-control" @bind-Value="Libro.Descripcion"></InputText>
+						<ValidationMessage For="(()=> Libro.Descripcion)" />
+					</div>
+
+					@* Precio*@
+					<div class="col-3 ms-5">
+						<label class="form-label"><strong> Precio</strong></label>
+						<InputNumber class="form-control" @bind-Value="Libro.Precio"></InputNumber>
+						<ValidationMessage For="(()=> Libro.Precio)" />
+					</div>
+
+					@* FechaPublicacion*@
+					<div class="col-3 ms-5">
+						<label class="form-label"><strong> FechaPublicacion</strong></label>
+						<InputDate class="form-control" @bind-Value="Libro.FechaPublicacion"></InputDate>
+						<ValidationMessage For="(()=> Libro.FechaPublicacion)" />
+					</div>
+
+					@*  Cantidad*@
+					<div class="col-3 ms-5">
+						<label class="form-label"><strong>  Cantidad</strong></label>
+						<InputNumber class="form-control" @bind-Value="Libro.Cantidad"></InputNumber>
+						<ValidationMessage For="(()=> Libro.Cantidad)" />
+					</div>
+
+					@*  ImagenUrl*@
+					<div class="col-3 ms-5">
+						<label class="form-label"><strong>  ImagenUrl</strong></label>
+						<InputFile class="form-control" @bind-Value="Libro.ImagenUrl"></InputFile>
+						<ValidationMessage For="(()=> Libro.ImagenUrl)" />
+					</div>
+
+
+				</div>
+				@*footer*@
+				<div class="card-footer text-center">
+					<button Type="button" Class="btn btn-primary" @onclick="Volver">Volver</button>
+					<button Type="submit" Class="btn btn-success">Modificar</button>
+				</div>
+
+
+			</div>
+
+
+		</div>
+
+
+
+	</div>
+</EditForm>
+
+
+@code {
+
+	[Parameter]
+
+	public int LibroId { get; set; }
+	public Libros Libro { get; set; } = new Libros();
+	public string Mensaje { get; set; } = string.Empty;
+
+	protected override async Task OnInitializedAsync()
+	{
+		Libro = await librosService.Buscar(LibroId); 
+	}
+	
+
+	public async Task Modificar()
+	{
+		if (await Validar())
+		{
+			Mensaje = "Ya esxiste un Libro con este nombre";
+			return;
+		}
+
+		var  Modificar= await librosService.Guardar(Libro);
+
+		if (Modificar)
+			Mensaje = "Se ha modificado correctamente el Libros";
+
+		else
+			Mensaje = "No se ha Modificado correctamente";
+	}
+
+	private async Task<bool> Validar()
+	{
+		var existe = await librosService.Existe(Libro.LibroId);
+		return existe;
+	}
+
+	public void Volver()
+	{
+		navigationManager.NavigateTo("/Admin/Index");
+
+	}
+}
