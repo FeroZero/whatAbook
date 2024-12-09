@@ -231,6 +231,35 @@ namespace WhatABook.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Resenas",
+                columns: table => new
+                {
+                    ResenaId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UsuarioId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    LibroId = table.Column<int>(type: "int", nullable: false),
+                    Calificación = table.Column<int>(type: "int", nullable: false),
+                    Comentario = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
+                    LibrosLibroId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Resenas", x => x.ResenaId);
+                    table.ForeignKey(
+                        name: "FK_Resenas_AspNetUsers_UsuarioId",
+                        column: x => x.UsuarioId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Resenas_Libros_LibrosLibroId",
+                        column: x => x.LibrosLibroId,
+                        principalTable: "Libros",
+                        principalColumn: "LibroId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "MetodosDePagos",
                 columns: table => new
                 {
@@ -374,6 +403,16 @@ namespace WhatABook.Migrations
                 column: "OrdenId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Resenas_LibrosLibroId",
+                table: "Resenas",
+                column: "LibrosLibroId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Resenas_UsuarioId",
+                table: "Resenas",
+                column: "UsuarioId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_VentasDetalles_LibroId",
                 table: "VentasDetalles",
                 column: "LibroId");
@@ -412,16 +451,19 @@ namespace WhatABook.Migrations
                 name: "OrdenDetalle");
 
             migrationBuilder.DropTable(
+                name: "Resenas");
+
+            migrationBuilder.DropTable(
                 name: "VentasDetalles");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Orden");
 
             migrationBuilder.DropTable(
-                name: "Orden");
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Libros");

@@ -7,7 +7,8 @@ namespace WhatABook.Data;
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<ApplicationUser>(options) {
     public DbSet<Libros> Libros { get; set; }
     public DbSet<Generos> Generos { get; set; }
-    
+    public DbSet<Resenas> Resenas { get; set; }
+
     public DbSet<Orden> Orden { get; set; }
     public DbSet<OrdenDetalle> OrdenDetalle { get; set; }
 

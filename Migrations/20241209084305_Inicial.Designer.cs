@@ -12,7 +12,7 @@ using WhatABook.Data;
 namespace WhatABook.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241206080530_Inicial")]
+    [Migration("20241209084305_Inicial")]
     partial class Inicial
     {
         /// <inheritdoc />
@@ -380,6 +380,41 @@ namespace WhatABook.Migrations
                     b.ToTable("OrdenDetalle");
                 });
 
+            modelBuilder.Entity("WhatABook.Models.Resenas", b =>
+                {
+                    b.Property<int>("ResenaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ResenaId"));
+
+                    b.Property<int>("Calificación")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Comentario")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<int>("LibroId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LibrosLibroId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UsuarioId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("ResenaId");
+
+                    b.HasIndex("LibrosLibroId");
+
+                    b.HasIndex("UsuarioId");
+
+                    b.ToTable("Resenas");
+                });
+
             modelBuilder.Entity("WhatABook.Models.Ventas", b =>
                 {
                     b.Property<int>("VentaId")
@@ -516,6 +551,25 @@ namespace WhatABook.Migrations
                     b.Navigation("Libros");
 
                     b.Navigation("Orden");
+                });
+
+            modelBuilder.Entity("WhatABook.Models.Resenas", b =>
+                {
+                    b.HasOne("WhatABook.Models.Libros", "Libros")
+                        .WithMany()
+                        .HasForeignKey("LibrosLibroId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WhatABook.Data.ApplicationUser", "Usuario")
+                        .WithMany()
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Libros");
+
+                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("WhatABook.Models.VentasDetalles", b =>
