@@ -4,7 +4,7 @@
 @inject NavigationManager NavigationManager
 @inject GenerosService GenerosService
 
-
+@attribute [Authorize]
 
 <PageTitle>WhatABook</PageTitle>
 
@@ -28,9 +28,11 @@
         <a href="/carrito" class="btn custom-login-btn">
             <i class="bi bi-box-arrow-in-right"></i> Log in
         </a>
-        <a href="/admin" class="btn btn-secondary">
-            <i class="bi bi-person-shield"></i> Admin Panel
-        </a>
+        <AuthorizeView Roles="Admin">
+            <a href="/admin" class="btn btn-secondary">
+                <i class="bi bi-person-shield"></i> Admin Panel
+            </a>
+        </AuthorizeView>
     </div>
 
     <div class="container mt-4">
