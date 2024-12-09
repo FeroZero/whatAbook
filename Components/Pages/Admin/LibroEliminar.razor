@@ -1,0 +1,68 @@
+﻿@page "/admin/eliminar/{LibroId:int}"
+@inject LibrosService librosService
+@inject ToastService toastService
+@inject NavigationManager navigationManager
+@rendermode	InteractiveServer
+
+
+<PageTitle>Eliminar</PageTitle>
+<div class="container">
+	<div class="card shadow-lg">
+		@*Header*@
+		<div class="card-header bg-primary text-white text-center">
+			<h3><strong>Eliminar Libro</strong></h3>
+		</div>
+		@*Body*@
+		<div class="card-body">
+				@*Datos*@
+				<div class="mb-1">
+				<p class="mb-0">Id: @Libro.ImagenUrl</p>
+				</div>
+				<div class="mb-1">
+				<p class="mb-0">Id: @Libro.Titulo</p>
+				</div>
+				<div class="mb-1">
+				<p class="mb-0">Fecha: @Libro.Autores</p>
+				</div>
+				<div class="mb-1">
+				<p class="mb-0">Combo: @Libro.Descripcion</p>
+				</div>
+				<div class="mb-1">
+					<p class="mb-0">Precio: @Libro.Precio</p>
+				</div>
+				<div class="mb-1">
+					<p class="mb-0">Precio: @Libro.FechaPublicacion</p>
+				</div>
+				<div class="mb-1">
+					<p class="mb-0">Precio: @Libro.Cantidad</p>
+				</div>
+			@*Footer*@
+			<div class="card-footer">
+					<a href="/Registro/Index" class="btn btn-outline-warning bi bi-arrow-90deg-left"></a>
+					<button class="btn btn-outline-danger bi bi-trash3" @onclick="Eliminar"></button>
+			</div>
+		</div>
+	</div>
+</div>
+
+@code {
+	[Parameter]
+	public int LibroId { get; set; }
+	public Libros Libro { get; set; } = new Libros();
+
+	protected override async Task OnInitializedAsync()
+	{
+		Libro = await librosService.Buscar(LibroId);
+	}
+
+	public async Task Eliminar()
+	{
+		var eliminar = await librosService.Eliminar(LibroId);
+		toastService.Notify(new(ToastType.Danger,
+		iconName: IconName.Trash3,
+		title: "Eliminado",
+		helpText: $"{DateTime.Now}",
+		message: $"Se elimino el Combo *{Libro.Descripcion}* correctamente."));
+		navigationManager.NavigateTo("/Registro/Index");
+	}
+}
