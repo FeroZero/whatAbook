@@ -1,6 +1,7 @@
 ﻿@page "/admin"
 @inject NavigationManager Navigation
 
+@attribute [Authorize(Roles = "Admin")]
 
 
 <PageTitle>Panel Administrativo</PageTitle>
