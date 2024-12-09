@@ -1,0 +1,277 @@
+﻿@page "/WhatABookIndex"
+@using WhatABook.Models
+@using WhatABook.Services
+@inject NavigationManager NavigationManager
+@inject GenerosService GenerosService
+
+
+
+<PageTitle>WhatABook</PageTitle>
+
+
+<div>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="search-bar">
+            <input type="text" @bind="searchTitle" class="form-control" placeholder="Buscar por título...">
+            <span class="search-icon">
+                <i class="bi bi-search"></i>
+            </span>
+        </div>
+        <select @bind="selectedGenero" class="form-select" style="width: 200px;">
+            <option value="">Todos los géneros</option>
+            @foreach (var genero in Generos)
+            {
+                <option value="@genero.TipoGeneros">@genero.TipoGeneros</option>
+            }
+        </select>
+        <button class="btn btn-primary" @onclick="ApplyFilters">Buscar</button>
+        <a href="/carrito" class="btn custom-login-btn">
+            <i class="bi bi-box-arrow-in-right"></i> Log in
+        </a>
+        <a href="/admin" class="btn btn-secondary">
+            <i class="bi bi-person-shield"></i> Admin Panel
+        </a>
+    </div>
+
+    <div class="container mt-4">
+        @if (filterApplied)
+        {
+            var filteredLibros = GetFilteredLibros();
+            if (filteredLibros.Any())
+            {
+                <div class="mb-5">
+                    <h2 class="text-start">Resultados de búsqueda</h2>
+                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-6 g-4">
+                        @foreach (var libro in filteredLibros)
+                        {
+                            <div class="col">
+                                <div class="card h-100 text-center shadow-sm book-card d-flex flex-column">
+                                    <img src="@libro.ImagenUrl" class="book-img" alt="@libro.Titulo">
+                                    <div class="card-body d-flex flex-column">
+                                        <h4 class="card-title">
+                                            <a href="/BookDetails/@libro.Titulo" class="book-title-link">@libro.Titulo</a>
+                                        </h4>
+                                        <p class="card-text">$@libro.Precio</p>
+                                        <button class="btn btn-primary w-100 btn-cart mt-auto" @onclick="() => AddToCart(libro)">
+                                            <i class="bi bi-cart"></i> Agregar
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="mb-5">
+                    <h2 class="text-start">No se encontraron libros que coincidan con tu búsqueda.</h2>
+                </div>
+            }
+        }
+        else
+        {
+            // Si no se han aplicado filtros, muestra todos los géneros
+            foreach (var genero in Generos)
+            {
+                <div class="mb-5">
+                    <h2 class="text-start">@genero.TipoGeneros</h2>
+                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-6 g-4">
+                        @foreach (var libro in genero.Libros)
+                        {
+                            <div class="col">
+                                <div class="card h-100 text-center shadow-sm book-card d-flex flex-column">
+                                    <img src="@libro.ImagenUrl" class="book-img" alt="@libro.Titulo">
+                                    <div class="card-body d-flex flex-column">
+                                        <h4 class="card-title">
+                                            <a href="/BookDetails/@libro.Titulo" class="book-title-link">@libro.Titulo</a>
+                                        </h4>
+                                        <p class="card-text">$@libro.Precio</p>
+                                        <button class="btn btn-primary w-100 btn-cart mt-auto" @onclick="() => AddToCart(libro)">
+                                            <i class="bi bi-cart"></i> Agregar
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+
+<style>
+    .custom-login-btn {
+        background-color: #81D4FA;
+        color: white;
+        font-weight: bold;
+        border-radius: 20px;
+        padding: 10px 20px;
+        border: none;
+        transition: background-color 0.3s;
+    }
+
+        .custom-login-btn:hover {
+            background-color: #17577e;
+        }
+
+    .search-bar {
+        position: relative;
+        width: 60%;
+    }
+
+        .search-bar input {
+            border-radius: 50px;
+            padding-left: 40px;
+        }
+
+        .search-bar .search-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #FFC107;
+        }
+
+
+    .book-card {
+        text-align: center;
+        border-radius: 8px;
+        overflow: hidden;
+        background-color: #fff;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start; /* Cambiar a flex-start para no estirar el contenido */
+        height: 100px; /* Permitir que la altura se ajuste automáticamente */
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
+        width: 260px; /* Ajustar el ancho aquí */
+        max-width: 100%; /* Asegúrate de que no exceda el contenedor */
+    }
+
+        .book-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+        }
+
+
+    .book-img {
+        width: 100%;
+        height: auto;
+        max-height: 150px; /* Reducir la altura máxima para que sea menos largo */
+        object-fit: contain;
+    }
+
+    .card-body {
+        padding: 5px; /* Ajustar el padding si es necesario */
+    }
+
+    .book-img {
+        width: 100%;
+        height: auto;
+        max-height: 200px;
+        object-fit: contain;
+    }
+
+    .book-info h5 {
+        font-size: 16px;
+        margin-top: 10px;
+        color: #333;
+    }
+
+    .book-info p {
+        font-size: 14px;
+        color:;
+    }
+
+    .book-title-link {
+        text-decoration: none;
+        color: #333;
+        font-size: 16px; /* Ajusta el tamaño de la fuente aquí */
+    }
+
+        .book-title-link:hover {
+            text-decoration: underline;
+            color: #007bff;
+        }
+
+
+    .category-section {
+        margin-bottom: 40px;
+    }
+
+    .category-title {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .row-cols-md-6 > .col {
+        flex: 0 0 16.6667%;
+        max-width: 16.6667%;
+    }
+
+    .btn-cart {
+        background-color: #3267fc;
+        color: white;
+        font-weight: bold;
+        border-radius: 30px;
+        border: none;
+        padding: 10px 17px; /* Reducir el padding */
+        width: auto; /* Permitir que el ancho dependa del contenido */
+        font-size: 14px; /* Ajustar el tamaño de la fuente */
+        cursor: pointer;
+        transition: background-color 0.3s;
+        display: inline-block; /* Asegurar que se ajuste al contenido */
+    }
+
+        .btn-cart:hover {
+            background-color: #31a8f1;
+        }
+</style>
+
+
+@code {
+    private List<Generos> Generos { get; set; } = new List<Generos>();
+    private string searchTitle { get; set; } = string.Empty;
+    private string selectedGenero { get; set; } = string.Empty;
+    private bool filterApplied { get; set; } = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Generos = GenerosService.ObtenerGeneros(); // Obtener los géneros desde el servicio síncrono
+    }
+
+    private void ApplyFilters()
+    {
+        filterApplied = true; // Establecer que los filtros han sido aplicados
+    }
+
+    private IEnumerable<Libros> GetFilteredLibros()
+    {
+        // Filtra los libros según el título y el género seleccionados
+        var filteredLibros = Generos.SelectMany(g => g.Libros).AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(searchTitle))
+        {
+            filteredLibros = filteredLibros.Where(libro => libro.Titulo.Contains(searchTitle, StringComparison.OrdinalIgnoreCase));
+        }
+
+        // if (!string.IsNullOrWhiteSpace(selectedGenero))
+        // {
+        //     filteredLibros = filteredLibros.Where(libro => libro.Nombres == selectedGenero);
+        // }
+
+        return filteredLibros.ToList();
+    }
+
+
+    private void AddToCart(Libros libro)
+    {
+        NavigationManager.NavigateTo("/carrito");
+    }
+}
