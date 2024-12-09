@@ -1,0 +1,60 @@
+﻿@page "/admin"
+@inject NavigationManager Navigation
+
+@attribute [Authorize(Roles = "Admin")]
+
+
+<PageTitle>Panel Administrativo</PageTitle>
+
+<div class="container-fluid min-vh-100 d-flex flex-column justify-content-center align-items-center bg-light">
+    <!-- Header -->
+    <div class="text-center mb-4">
+        <h1 class="display-4" style="color: #343a40;"> Panel Administrativo</h1>
+        <p class="lead text-muted"></p>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="row justify-content-center w-75">
+        <!-- Create Book -->
+        <div class="col-md-4 mb-3">
+            <button class="btn btn-block btn-lg btn-outline-success p-4 rounded shadow" @onclick="NavigateToCreate">
+                <i class="bi bi-plus-circle display-4"></i>
+                <h4 class="mt-2">Agregar Libro</h4>
+            </button>
+        </div>
+        <!-- Edit Book -->
+        <div class="col-md-4 mb-3">
+            <button class="btn btn-block btn-lg btn-outline-warning p-4 rounded shadow" @onclick="NavigateToEdit">
+                <i class="bi bi-pencil-square display-4"></i>
+                <h4 class="mt-2">Editar Libro</h4>
+
+            </button>
+        </div>
+        <!-- Delete Book -->
+        <div class="col-md-4 mb-3">
+            <button class="btn btn-block btn-lg btn-outline-danger p-4 rounded shadow" @onclick="NavigateToDelete">
+                <i class="bi bi-trash display-4"></i>
+                <h4 class="mt-2">Eliminar Libro</h4>
+            </button>
+        </div>
+    </div>
+</div>
+
+
+@code {
+
+    private void NavigateToCreate()
+    {
+        
+    }
+
+    private void NavigateToEdit()
+    {
+    }
+
+    private void NavigateToDelete()
+    {
+        
+    }
+
+}
