@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace WhatABook.Migrations
 {
     /// <inheritdoc />
@@ -51,32 +53,56 @@ namespace WhatABook.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Clientes",
+                name: "Libros",
                 columns: table => new
                 {
-                    ClienteId = table.Column<int>(type: "int", nullable: false)
+                    LibroId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Telefono = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Nombre = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Correo = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FechaRegistro = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Titulo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Autores = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Descripcion = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Precio = table.Column<double>(type: "float", nullable: false),
+                    FechaPublicacion = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Cantidad = table.Column<int>(type: "int", nullable: false),
+                    ImagenUrl = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Clientes", x => x.ClienteId);
+                    table.PrimaryKey("PK_Libros", x => x.LibroId);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Generos",
+                name: "Orden",
                 columns: table => new
                 {
-                    GeneroId = table.Column<int>(type: "int", nullable: false)
+                    OrdenId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TipoGeneros = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ClienteId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Nombre = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Telefono = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Fecha = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    MetodoDePagoId = table.Column<int>(type: "int", nullable: false),
+                    Monto = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Generos", x => x.GeneroId);
+                    table.PrimaryKey("PK_Orden", x => x.OrdenId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Ventas",
+                columns: table => new
+                {
+                    VentaId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ClienteId = table.Column<int>(type: "int", nullable: false),
+                    OrdenId = table.Column<int>(type: "int", nullable: false),
+                    MetodoDePagoId = table.Column<int>(type: "int", nullable: false),
+                    FechaVenta = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Ventas", x => x.VentaId);
                 });
 
             migrationBuilder.CreateTable(
@@ -186,125 +212,68 @@ namespace WhatABook.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Carritos",
+                name: "Generos",
                 columns: table => new
                 {
-                    CarritoId = table.Column<int>(type: "int", nullable: false)
+                    GeneroId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ClienteId = table.Column<int>(type: "int", nullable: false)
+                    TipoGeneros = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LibrosLibroId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Carritos", x => x.CarritoId);
+                    table.PrimaryKey("PK_Generos", x => x.GeneroId);
                     table.ForeignKey(
-                        name: "FK_Carritos_Clientes_ClienteId",
-                        column: x => x.ClienteId,
-                        principalTable: "Clientes",
-                        principalColumn: "ClienteId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Pagos",
-                columns: table => new
-                {
-                    PagoId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ClienteId = table.Column<int>(type: "int", nullable: false),
-                    MetodoPagoId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MontoTotal = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    FechaPago = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Pagos", x => x.PagoId);
-                    table.ForeignKey(
-                        name: "FK_Pagos_Clientes_ClienteId",
-                        column: x => x.ClienteId,
-                        principalTable: "Clientes",
-                        principalColumn: "ClienteId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Libros",
-                columns: table => new
-                {
-                    LibroId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Titulo = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Autores = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    GeneroId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Precio = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    FechaPublicacion = table.Column<DateOnly>(type: "date", nullable: false),
-                    Estado = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Descripcion = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Cantidad = table.Column<int>(type: "int", nullable: false),
-                    ImagenUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    GenerosGeneroId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Libros", x => x.LibroId);
-                    table.ForeignKey(
-                        name: "FK_Libros_Generos_GenerosGeneroId",
-                        column: x => x.GenerosGeneroId,
-                        principalTable: "Generos",
-                        principalColumn: "GeneroId");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Ventas",
-                columns: table => new
-                {
-                    VentaId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ClienteId = table.Column<int>(type: "int", nullable: false),
-                    ClientesClienteId = table.Column<int>(type: "int", nullable: true),
-                    PagoId = table.Column<int>(type: "int", nullable: false),
-                    PagosPagoId = table.Column<int>(type: "int", nullable: true),
-                    FechaVenta = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Ventas", x => x.VentaId);
-                    table.ForeignKey(
-                        name: "FK_Ventas_Clientes_ClientesClienteId",
-                        column: x => x.ClientesClienteId,
-                        principalTable: "Clientes",
-                        principalColumn: "ClienteId");
-                    table.ForeignKey(
-                        name: "FK_Ventas_Pagos_PagosPagoId",
-                        column: x => x.PagosPagoId,
-                        principalTable: "Pagos",
-                        principalColumn: "PagoId");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CarritoDetalles",
-                columns: table => new
-                {
-                    CarritoDetalleId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CarritoId = table.Column<int>(type: "int", nullable: false),
-                    LibroId = table.Column<int>(type: "int", nullable: false),
-                    LibrosLibroId = table.Column<int>(type: "int", nullable: false),
-                    Cantidad = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CarritoDetalles", x => x.CarritoDetalleId);
-                    table.ForeignKey(
-                        name: "FK_CarritoDetalles_Carritos_CarritoId",
-                        column: x => x.CarritoId,
-                        principalTable: "Carritos",
-                        principalColumn: "CarritoId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CarritoDetalles_Libros_LibrosLibroId",
+                        name: "FK_Generos_Libros_LibrosLibroId",
                         column: x => x.LibrosLibroId,
                         principalTable: "Libros",
-                        principalColumn: "LibroId",
+                        principalColumn: "LibroId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MetodosDePagos",
+                columns: table => new
+                {
+                    MetodoDePagoId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Tipo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OrdenId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MetodosDePagos", x => x.MetodoDePagoId);
+                    table.ForeignKey(
+                        name: "FK_MetodosDePagos_Orden_OrdenId",
+                        column: x => x.OrdenId,
+                        principalTable: "Orden",
+                        principalColumn: "OrdenId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OrdenDetalle",
+                columns: table => new
+                {
+                    OrdenDetalleId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    OrdenId = table.Column<int>(type: "int", nullable: false),
+                    LibroId = table.Column<int>(type: "int", nullable: false),
+                    Precio = table.Column<double>(type: "float", nullable: false),
+                    Cantidad = table.Column<int>(type: "int", nullable: false),
+                    LibrosLibroId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrdenDetalle", x => x.OrdenDetalleId);
+                    table.ForeignKey(
+                        name: "FK_OrdenDetalle_Libros_LibrosLibroId",
+                        column: x => x.LibrosLibroId,
+                        principalTable: "Libros",
+                        principalColumn: "LibroId");
+                    table.ForeignKey(
+                        name: "FK_OrdenDetalle_Orden_OrdenId",
+                        column: x => x.OrdenId,
+                        principalTable: "Orden",
+                        principalColumn: "OrdenId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -317,7 +286,7 @@ namespace WhatABook.Migrations
                     VentaId = table.Column<int>(type: "int", nullable: false),
                     LibroId = table.Column<int>(type: "int", nullable: false),
                     Cantidad = table.Column<int>(type: "int", nullable: false),
-                    Precio = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    Precio = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -334,6 +303,15 @@ namespace WhatABook.Migrations
                         principalTable: "Ventas",
                         principalColumn: "VentaId",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "MetodosDePagos",
+                columns: new[] { "MetodoDePagoId", "OrdenId", "Tipo" },
+                values: new object[,]
+                {
+                    { 1, null, "Credito" },
+                    { 2, null, "Debito" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -376,39 +354,24 @@ namespace WhatABook.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CarritoDetalles_CarritoId",
-                table: "CarritoDetalles",
-                column: "CarritoId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CarritoDetalles_LibrosLibroId",
-                table: "CarritoDetalles",
+                name: "IX_Generos_LibrosLibroId",
+                table: "Generos",
                 column: "LibrosLibroId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Carritos_ClienteId",
-                table: "Carritos",
-                column: "ClienteId");
+                name: "IX_MetodosDePagos_OrdenId",
+                table: "MetodosDePagos",
+                column: "OrdenId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Libros_GenerosGeneroId",
-                table: "Libros",
-                column: "GenerosGeneroId");
+                name: "IX_OrdenDetalle_LibrosLibroId",
+                table: "OrdenDetalle",
+                column: "LibrosLibroId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Pagos_ClienteId",
-                table: "Pagos",
-                column: "ClienteId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Ventas_ClientesClienteId",
-                table: "Ventas",
-                column: "ClientesClienteId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Ventas_PagosPagoId",
-                table: "Ventas",
-                column: "PagosPagoId");
+                name: "IX_OrdenDetalle_OrdenId",
+                table: "OrdenDetalle",
+                column: "OrdenId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_VentasDetalles_LibroId",
@@ -440,7 +403,13 @@ namespace WhatABook.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "CarritoDetalles");
+                name: "Generos");
+
+            migrationBuilder.DropTable(
+                name: "MetodosDePagos");
+
+            migrationBuilder.DropTable(
+                name: "OrdenDetalle");
 
             migrationBuilder.DropTable(
                 name: "VentasDetalles");
@@ -452,22 +421,13 @@ namespace WhatABook.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Carritos");
+                name: "Orden");
 
             migrationBuilder.DropTable(
                 name: "Libros");
 
             migrationBuilder.DropTable(
                 name: "Ventas");
-
-            migrationBuilder.DropTable(
-                name: "Generos");
-
-            migrationBuilder.DropTable(
-                name: "Pagos");
-
-            migrationBuilder.DropTable(
-                name: "Clientes");
         }
     }
 }

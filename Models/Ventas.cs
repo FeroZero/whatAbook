@@ -9,17 +9,16 @@ public class Ventas
 	public int VentaId { get; set; }
 
 	[Required]
-	[ForeignKey("ClienteId")]
+	[ForeignKey("ApplicationUser")]
 	public int ClienteId { get; set; }
-	public Clientes? Clientes { get; set; }
 
-	[Required]
-	[ForeignKey("PagoId")]
-	public int PagoId { get; set; }
-	public Pagos? Pagos { get; set; }
+	[ForeignKey("OrdenId")]
+    public int OrdenId { get; set; }
 
-	[Required(ErrorMessage = "Fecha Requerida")]
-	public DateTime FechaVenta { get; set; } = DateTime.Now;
+	[ForeignKey("MetodoDePagoId")]
+    public int MetodoDePagoId { get; set; }
+
+    public DateTime FechaVenta { get; set; } = DateTime.Now;
 
 	public virtual ICollection<VentasDetalles> VentaDetalles { get; set; } = new List<VentasDetalles>();
 }

@@ -8,11 +8,10 @@
 @code {
 	[Parameter]
 	public int clienteId { get; set; }
-	public Clientes cliente { get; set; } = new Clientes();
 
 	protected override async Task OnInitializedAsync()
 	{
-		cliente = await clientesService.Buscar(clienteId);
+		
 	}
 
 }
