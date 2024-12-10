@@ -33,7 +33,7 @@
 					</div>
 					
 					<div class="col-3 ms-5">
-						<label class="form-label"><strong>Autores</strong></label>
+						<label class="form-label"><strong>Descripcion</strong></label>
 						<InputText class="form-control" @bind-Value="Libro.Descripcion"></InputText>
 						<ValidationMessage For="(()=> Libro.Descripcion)" />
 					</div>
@@ -58,7 +58,7 @@
 
 					<div class="col-3 ms-5">
 						<label class="form-label"><strong>Imagen</strong></label>
-						<InputFile class="form-control" @bind-Value="Libro.ImagenUrl"></InputFile>
+						<InputText class="form-control" @bind-Value="Libro.ImagenUrl"></InputText>
 						<ValidationMessage For="(()=> Libro.ImagenUrl)" />
 					</div>
 
@@ -100,6 +100,6 @@
 
 	public void Volver()
 	{
-		Navigation.NavigateTo("/admin");
+		Navigation.NavigateTo("/Admin/Index");
 	}
 }
